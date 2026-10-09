@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Chitra.Api/Chitra.Api.csproj" />
+    <Project Path="src/Chitra.Application/Chitra.Application.csproj" />
+    <Project Path="src/Chitra.Domain/Chitra.Domain.csproj" />
+    <Project Path="src/Chitra.Infrastructure/Chitra.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Chitra.Tests/Chitra.Tests.csproj" />
+  </Folder>
+</Solution>

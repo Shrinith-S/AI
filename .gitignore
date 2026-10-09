@@ -1,0 +1,25 @@
+# Local data (database, generated media, dev logs)
+/data/
+/storage/
+/.dev/
+/.tools/
+kaggle.json
+access_token
+/comfyui/
+.env
+
+# .NET
+bin/
+obj/
+*.user
+TestResults/
+
+# Angular / Node
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vs/

@@ -1,0 +1,107 @@
+# Chitra Studio — self-hosted AI image & video studio.
+#
+# Modes (pick one):
+#   LOCAL GPU   docker compose --profile gpu up -d --build      # ComfyUI in Docker with an NVIDIA GPU
+#   CPU         docker compose --profile cpu up -d --build      # ComfyUI in Docker on CPU (slow; SD 1.5 only realistic)
+#   REMOTE      docker compose up -d --build                    # no ComfyUI container; set COMFYUI_URL in .env
+#               (On Windows, running ComfyUI natively and using http://host.docker.internal:8188 is usually easiest.)
+#
+# Add "--profile postgres" to use PostgreSQL instead of the default SQLite file.
+# Copy .env.example to .env first.
+
+name: chitra
+
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      Studio__ComfyUiUrl: ${COMFYUI_URL:-http://comfyui:8188}
+      Studio__ComfyUiModelsPath: /models
+      Studio__LocalOnly: ${LOCAL_ONLY:-true}
+      Database__Provider: ${DB_PROVIDER:-Sqlite}
+      Database__PostgresConnectionString: Host=database;Database=${POSTGRES_DB:-chitra};Username=${POSTGRES_USER:-chitra};Password=${POSTGRES_PASSWORD:-change-me}
+      Cors__Origins__0: http://localhost:${WEB_PORT:-8080}
+      Auth__Mode: ${AUTH_MODE:-None}
+      Auth__Authority: ${AUTH_AUTHORITY:-}
+      Auth__Audience: ${AUTH_AUDIENCE:-}
+    volumes:
+      - chitra-data:/data
+      # Same folder ComfyUI reads models from, so the Models page can download into it.
+      - ${COMFYUI_MODELS_DIR:-./comfyui/models}:/models
+      # Optional Kaggle GPU provider: mount the folder holding your Kaggle API token (read-only).
+      # - ${KAGGLE_CONFIG_DIR}:/root/.kaggle:ro
+    ports:
+      - "${API_PORT:-5080}:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${WEB_PORT:-8080}:80"
+
+  comfyui-gpu:
+    profiles: ["gpu"]
+    build:
+      context: ./docker/comfyui
+      args:
+        TORCH_VARIANT: cu128
+    restart: unless-stopped
+    environment:
+      COMFYUI_ARGS: ${COMFYUI_ARGS:-}
+    volumes:
+      - ${COMFYUI_MODELS_DIR:-./comfyui/models}:/opt/ComfyUI/models
+      - comfyui-output:/opt/ComfyUI/output
+      - comfyui-input:/opt/ComfyUI/input
+    ports:
+      - "${COMFYUI_PORT:-8188}:8188"
+    networks:
+      default:
+        aliases: [comfyui]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  comfyui-cpu:
+    profiles: ["cpu"]
+    build:
+      context: ./docker/comfyui
+      args:
+        TORCH_VARIANT: cpu
+    restart: unless-stopped
+    environment:
+      COMFYUI_ARGS: --cpu ${COMFYUI_ARGS:-}
+    volumes:
+      - ${COMFYUI_MODELS_DIR:-./comfyui/models}:/opt/ComfyUI/models
+      - comfyui-output:/opt/ComfyUI/output
+      - comfyui-input:/opt/ComfyUI/input
+    ports:
+      - "${COMFYUI_PORT:-8188}:8188"
+    networks:
+      default:
+        aliases: [comfyui]
+
+  database:
+    profiles: ["postgres"]
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-chitra}
+      POSTGRES_USER: ${POSTGRES_USER:-chitra}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  chitra-data:
+  comfyui-output:
+  comfyui-input:
+  postgres-data:

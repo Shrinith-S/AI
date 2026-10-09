@@ -1,0 +1,223 @@
+{
+  "//": "Model catalog. Each model maps capabilities to ComfyUI API-format workflows in ./workflows. Sizes were verified against the download servers; exact sizes are re-read before any download. Add your own models by appending entries here.",
+  "models": [
+    {
+      "id": "sd15",
+      "name": "Stable Diffusion 1.5",
+      "family": "Stable Diffusion",
+      "description": "Small, fast classic model. Runs on 4 GB GPUs and (slowly) on CPU.",
+      "license": "CreativeML Open RAIL-M",
+      "homepage": "https://huggingface.co/Comfy-Org/stable-diffusion-v1-5-archive",
+      "capabilities": [ "TextToImage" ],
+      "workflows": { "TextToImage": "sd_t2i.json" },
+      "files": [
+        {
+          "role": "checkpoint",
+          "fileName": "v1-5-pruned-emaonly-fp16.safetensors",
+          "folder": "checkpoints",
+          "sizeBytes": 2132696762,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/stable-diffusion-v1-5-archive/resolve/main/v1-5-pruned-emaonly-fp16.safetensors"
+        }
+      ],
+      "minVramGb": 4,
+      "recommendedVramGb": 6,
+      "defaults": { "width": 512, "height": 512, "steps": 25, "cfg": 7, "sampler": "euler_ancestral", "scheduler": "normal", "dimensionMultiple": 8, "maxDimension": 1024 }
+    },
+    {
+      "id": "sdxl-base",
+      "name": "SDXL 1.0 Base",
+      "family": "Stable Diffusion",
+      "description": "High-quality 1024px image model with broad style range.",
+      "license": "CreativeML Open RAIL++-M",
+      "homepage": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0",
+      "capabilities": [ "TextToImage" ],
+      "workflows": { "TextToImage": "sd_t2i.json" },
+      "files": [
+        {
+          "role": "checkpoint",
+          "fileName": "sd_xl_base_1.0.safetensors",
+          "folder": "checkpoints",
+          "sizeBytes": 6938078334,
+          "downloadUrl": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors"
+        }
+      ],
+      "minVramGb": 8,
+      "recommendedVramGb": 12,
+      "defaults": { "width": 1024, "height": 1024, "steps": 30, "cfg": 7, "sampler": "dpmpp_2m", "scheduler": "karras", "dimensionMultiple": 8, "maxDimension": 2048 }
+    },
+    {
+      "id": "flux-schnell",
+      "name": "FLUX.1 [schnell] (fp8)",
+      "family": "FLUX",
+      "description": "Excellent prompt following and text rendering in 4 steps. Large download.",
+      "license": "Apache-2.0",
+      "homepage": "https://huggingface.co/Comfy-Org/flux1-schnell",
+      "capabilities": [ "TextToImage" ],
+      "workflows": { "TextToImage": "flux_t2i.json" },
+      "files": [
+        {
+          "role": "checkpoint",
+          "fileName": "flux1-schnell-fp8.safetensors",
+          "folder": "checkpoints",
+          "sizeBytes": 17236328572,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/flux1-schnell/resolve/main/flux1-schnell-fp8.safetensors"
+        }
+      ],
+      "minVramGb": 12,
+      "recommendedVramGb": 16,
+      "notes": "Negative prompts and CFG have no effect on FLUX schnell (CFG is fixed at 1).",
+      "defaults": { "width": 1024, "height": 1024, "steps": 4, "cfg": 1, "sampler": "euler", "scheduler": "simple", "dimensionMultiple": 16, "maxDimension": 2048 }
+    },
+    {
+      "id": "ltxv-2b",
+      "name": "LTX-Video 2B v0.9.5",
+      "family": "LTX-Video",
+      "description": "Fast open video model for text-to-video and image-to-video. Good first choice for 8-12 GB GPUs.",
+      "license": "LTX-Video Open Weights License",
+      "homepage": "https://huggingface.co/Lightricks/LTX-Video",
+      "capabilities": [ "TextToVideo", "ImageToVideo" ],
+      "workflows": { "TextToVideo": "ltxv_t2v.json", "ImageToVideo": "ltxv_i2v.json" },
+      "files": [
+        {
+          "role": "checkpoint",
+          "fileName": "ltx-video-2b-v0.9.5.safetensors",
+          "folder": "checkpoints",
+          "sizeBytes": 6340729500,
+          "downloadUrl": "https://huggingface.co/Lightricks/LTX-Video/resolve/main/ltx-video-2b-v0.9.5.safetensors"
+        },
+        {
+          "role": "text_encoder",
+          "fileName": "t5xxl_fp8_e4m3fn.safetensors",
+          "folder": "text_encoders",
+          "sizeBytes": 4893934904,
+          "downloadUrl": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn.safetensors"
+        }
+      ],
+      "minVramGb": 8,
+      "recommendedVramGb": 12,
+      "notes": "Width and height must be multiples of 32. Long, descriptive prompts work best.",
+      "defaults": { "width": 768, "height": 512, "steps": 30, "cfg": 3, "sampler": "euler", "scheduler": "simple", "nativeFps": 24, "maxFrames": 257, "frameMultiple": 8, "dimensionMultiple": 32, "maxDimension": 1280,
+        "negativePrompt": "low quality, worst quality, deformed, distorted, disfigured, motion smear, motion artifacts, fused fingers, bad anatomy, weird hand, ugly" }
+    },
+    {
+      "id": "wan21-t2v-1.3b",
+      "name": "Wan 2.1 Text-to-Video 1.3B",
+      "family": "Wan",
+      "description": "Small Wan model with strong motion quality for its size. 480p.",
+      "license": "Apache-2.0",
+      "homepage": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged",
+      "capabilities": [ "TextToVideo" ],
+      "workflows": { "TextToVideo": "wan21_t2v.json" },
+      "files": [
+        {
+          "role": "diffusion_model",
+          "fileName": "wan2.1_t2v_1.3B_fp16.safetensors",
+          "folder": "diffusion_models",
+          "sizeBytes": 2838303560,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_t2v_1.3B_fp16.safetensors"
+        },
+        {
+          "role": "text_encoder",
+          "fileName": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+          "folder": "text_encoders",
+          "sizeBytes": 6735906897,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+        },
+        {
+          "role": "vae",
+          "fileName": "wan_2.1_vae.safetensors",
+          "folder": "vae",
+          "sizeBytes": 253815318,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors"
+        }
+      ],
+      "minVramGb": 8,
+      "recommendedVramGb": 12,
+      "notes": "Trained at 16 fps; best at 832x480 or 480x832. Maximum 81 frames.",
+      "defaults": { "width": 832, "height": 480, "steps": 30, "cfg": 6, "sampler": "uni_pc", "scheduler": "simple", "shift": 8, "nativeFps": 16, "maxFrames": 81, "frameMultiple": 4, "dimensionMultiple": 16, "maxDimension": 1280,
+        "negativePrompt": "bright tones, overexposed, static, blurred details, subtitles, worst quality, low quality, JPEG artifacts, ugly, deformed, extra fingers, poorly drawn hands, poorly drawn faces, fused fingers, still picture, cluttered background" }
+    },
+    {
+      "id": "wan22-ti2v-5b",
+      "name": "Wan 2.2 TI2V 5B",
+      "family": "Wan",
+      "description": "Wan 2.2 hybrid model: text-to-video and image-to-video at 720p, 24 fps.",
+      "license": "Apache-2.0",
+      "homepage": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged",
+      "capabilities": [ "TextToVideo", "ImageToVideo" ],
+      "workflows": { "TextToVideo": "wan22_ti2v_t2v.json", "ImageToVideo": "wan22_ti2v_i2v.json" },
+      "files": [
+        {
+          "role": "diffusion_model",
+          "fileName": "wan2.2_ti2v_5B_fp16.safetensors",
+          "folder": "diffusion_models",
+          "sizeBytes": 9999658848,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors"
+        },
+        {
+          "role": "text_encoder",
+          "fileName": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+          "folder": "text_encoders",
+          "sizeBytes": 6735906897,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+        },
+        {
+          "role": "vae",
+          "fileName": "wan2.2_vae.safetensors",
+          "folder": "vae",
+          "sizeBytes": 1409400960,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/vae/wan2.2_vae.safetensors"
+        }
+      ],
+      "minVramGb": 8,
+      "recommendedVramGb": 16,
+      "notes": "Native resolution 1280x704. With 8 GB VRAM ComfyUI offloads weights to system RAM, which is slow.",
+      "defaults": { "width": 1280, "height": 704, "steps": 20, "cfg": 5, "sampler": "uni_pc", "scheduler": "simple", "shift": 8, "nativeFps": 24, "maxFrames": 121, "frameMultiple": 4, "dimensionMultiple": 32, "maxDimension": 1280,
+        "negativePrompt": "bright tones, overexposed, static, blurred details, subtitles, worst quality, low quality, JPEG artifacts, ugly, deformed, extra fingers, poorly drawn hands, poorly drawn faces, fused fingers, still picture, cluttered background" }
+    },
+    {
+      "id": "hunyuan-t2v",
+      "name": "HunyuanVideo T2V 720p",
+      "family": "HunyuanVideo",
+      "description": "Large, high-quality text-to-video model. Needs a high-end GPU.",
+      "license": "Tencent Hunyuan Community License",
+      "homepage": "https://huggingface.co/Comfy-Org/HunyuanVideo_repackaged",
+      "capabilities": [ "TextToVideo" ],
+      "workflows": { "TextToVideo": "hunyuan_t2v.json" },
+      "files": [
+        {
+          "role": "diffusion_model",
+          "fileName": "hunyuan_video_t2v_720p_bf16.safetensors",
+          "folder": "diffusion_models",
+          "sizeBytes": 25642131432,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/HunyuanVideo_repackaged/resolve/main/split_files/diffusion_models/hunyuan_video_t2v_720p_bf16.safetensors"
+        },
+        {
+          "role": "clip_l",
+          "fileName": "clip_l.safetensors",
+          "folder": "text_encoders",
+          "sizeBytes": 246144152,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/HunyuanVideo_repackaged/resolve/main/split_files/text_encoders/clip_l.safetensors"
+        },
+        {
+          "role": "llava",
+          "fileName": "llava_llama3_fp8_scaled.safetensors",
+          "folder": "text_encoders",
+          "sizeBytes": 9091392483,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/HunyuanVideo_repackaged/resolve/main/split_files/text_encoders/llava_llama3_fp8_scaled.safetensors"
+        },
+        {
+          "role": "vae",
+          "fileName": "hunyuan_video_vae_bf16.safetensors",
+          "folder": "vae",
+          "sizeBytes": 492984198,
+          "downloadUrl": "https://huggingface.co/Comfy-Org/HunyuanVideo_repackaged/resolve/main/split_files/vae/hunyuan_video_vae_bf16.safetensors"
+        }
+      ],
+      "minVramGb": 16,
+      "recommendedVramGb": 24,
+      "notes": "Uses embedded guidance (the CFG value is the guidance strength); negative prompts are ignored.",
+      "defaults": { "width": 848, "height": 480, "steps": 20, "cfg": 6, "sampler": "euler", "scheduler": "simple", "shift": 7, "nativeFps": 24, "maxFrames": 129, "frameMultiple": 4, "dimensionMultiple": 16, "maxDimension": 1280 }
+    }
+  ]
+}
